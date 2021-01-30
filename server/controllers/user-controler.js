@@ -38,9 +38,9 @@ router.post("/login", async (req, res) => {
 
   try {
     const tokenObj = await User.authenticate(user_id, password);
+
     return res.cookie("auth_token", tokenObj.token).send("User logged in");
   } catch (err) {
-    console.log(err);
     return res.status(400).send(err.message);
   }
 });
@@ -67,9 +67,16 @@ router.delete("/logout", async (req, res) => {
 
 /* Post data route
 ========================================================= */
-router.post("/data", (req, res) => {
+router.post("/sendRecord", (req, res) => {
   const { time, pomodoro } = req.body;
   const { user } = req;
+  const result = Time.updateRecord(user, time, pomodoro)
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
 });
 
 // export the router so we can pass the routes to our server

@@ -2,26 +2,30 @@ const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("User", {
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
+  const User = sequelize.define(
+    "User",
+    {
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      username: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    username: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  });
+    { timestamps: false }
+  );
 
   // set up the associations so we can make queries that include
   // the related objects
-  User.associate = function ({ AuthToken, Time }) {
+  User.associate = function ({ Time, AuthToken }) {
     User.hasMany(AuthToken);
     User.hasMany(Time);
   };

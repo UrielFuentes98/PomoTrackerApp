@@ -21,7 +21,7 @@ app.use(userController);
 
 // serve up the public folder so we can request static
 // assets from the client
-app.use(express.static(`${clientDir}/public`));
+// app.use(express.static(`${clientDir}/public`));
 // start the express server
 app.use((err, req, res, next) => {
   res.status(err.status);
