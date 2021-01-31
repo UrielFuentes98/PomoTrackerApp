@@ -4,8 +4,9 @@
   "description": "Pomodoro method tracker app",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server --watch server"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "pomodoro",
