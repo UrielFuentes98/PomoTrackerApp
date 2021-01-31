@@ -7,8 +7,6 @@ const cookieParser = require("cookie-parser");
 const db = require("./models/index");
 const customAuthMiddleware = require("./middleware/auth-middleware");
 const userController = require("./controllers/user-controler");
-// directory references
-const clientDir = path.join(__dirname, "../client");
 // set up the Express App
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,8 +14,13 @@ const PORT = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+// Static files
+app.use(express.static("build"));
 app.use(customAuthMiddleware);
 app.use(userController);
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/index.html"));
+});
 
 // serve up the public folder so we can request static
 // assets from the client
