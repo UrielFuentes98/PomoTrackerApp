@@ -67,16 +67,28 @@ router.delete("/logout", async (req, res) => {
 
 /* Post data route
 ========================================================= */
-router.post("/sendRecord", (req, res) => {
+router.post("/sendRecord", async (req, res) => {
   const { time, pomodoro } = req.body;
   const { user } = req;
-  const result = Time.updateRecord(user, time, pomodoro)
+  Time.updateRecord(user, time, pomodoro)
     .then((result) => {
       res.status(200).send(result);
     })
     .catch((error) => {
+      console.log(error);
       res.status(400).send(error);
     });
+});
+
+router.get("/main-stats", async (req, res) => {
+  try {
+    let stats = await Time.getStats(req.user);
+    res.status(200).json(stats);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+    res.send(error.message);
+  }
 });
 
 // export the router so we can pass the routes to our server
