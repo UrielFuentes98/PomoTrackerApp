@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const path = require("path");
+
 const cookieParser = require("cookie-parser");
 // Requiring our models for syncing
 const db = require("./models/index");
@@ -11,8 +11,7 @@ const userController = require("./controllers/user-controler");
 const app = express();
 const PORT = process.env.PORT || 8080;
 // Express middleware that allows POSTing data
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cookieParser());
 // Static files
 app.use(express.static("build"));

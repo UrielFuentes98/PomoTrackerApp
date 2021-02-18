@@ -10,8 +10,7 @@ const { User, Time } = require("../models");
 ========================================================= */
 router.post("/register", async (req, res) => {
   const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(req.body.password, salt);
-
+  const hash = bcrypt.hashSync(req.body.password, salt); 
   try {
     // create a new user with the password hash from bcrypt
     let user = await User.create(Object.assign(req.body, { password: hash }));
@@ -20,7 +19,10 @@ router.post("/register", async (req, res) => {
     let tokenObj = await user.authorize();
 
     // send back the new user and auth token to the client
-    return res.cookie("auth_token", tokenObj.token).send("User registered.");
+    return res
+      .status(200)
+      .cookie("auth_token", tokenObj.token)
+      .send("User registered."); 
   } catch (err) {
     return res.status(400).send(err.message);
   }
@@ -30,10 +32,9 @@ router.post("/register", async (req, res) => {
 ========================================================= */
 router.post("/login", async (req, res) => {
   const { user_id, password } = req.body;
-
   // Bad request if username or password missing.
   if (!user_id || !password) {
-    return res.status(400).send("Request missing username or password.");
+    return res.status(400).send("Username or password missing.");
   }
 
   try {
@@ -45,7 +46,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* Logout Route
+/* Logout Route 
 ========================================================= */
 router.delete("/logout", async (req, res) => {
   //Getting authToken and user data

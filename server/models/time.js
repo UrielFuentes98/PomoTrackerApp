@@ -85,8 +85,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    Stats.secToday = today.time_sec;
-    Stats.pomoToday = today.pomodoros;
+    if (today) {
+      Stats.secToday = today.time_sec;
+      Stats.pomoToday = today.pomodoros;
+    }
 
     //Find stats for last week
     const weekData = await Time.findAll({
