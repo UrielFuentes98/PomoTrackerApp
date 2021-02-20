@@ -8,7 +8,7 @@ const db = require("./models/index");
 const customAuthMiddleware = require("./middleware/auth-middleware");
 const userController = require("./controllers/user-controler");
 
-// set up the Express App
+// set up the Express App server
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(express.json());
