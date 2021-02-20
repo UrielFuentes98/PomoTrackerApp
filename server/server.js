@@ -3,7 +3,7 @@ const express = require("express");
 
 const cookieParser = require("cookie-parser");
 
-// Requiring our models for syncing
+// Requiring our models for syncing db
 const db = require("./models/index");
 const customAuthMiddleware = require("./middleware/auth-middleware");
 const userController = require("./controllers/user-controler");
