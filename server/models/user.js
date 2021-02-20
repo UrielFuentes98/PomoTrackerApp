@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
 
     await user.addAuthToken(authToken);
 
-    return authToken;
+    return {user, authToken};
   };
 
   User.logout = async function (token) {

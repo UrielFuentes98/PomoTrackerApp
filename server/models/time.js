@@ -69,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
   Time.getStats = async function (user) {
     //Object to store main stats to return
     let Stats = {
+      username: user.username,
       secToday: 0,
       pomoToday: 0,
       secWeek: 0,
