@@ -109,5 +109,9 @@ router.get("/main-stats", async (req, res) => {
   }
 });
 
+router.get('/checkCookie', (req, res) => {
+  return res.send("Cookie set");
+})
+
 // export the router so we can pass the routes to our server
 module.exports = router;
