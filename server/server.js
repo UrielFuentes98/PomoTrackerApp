@@ -10,8 +10,9 @@ const userController = require("./controllers/user-controler");
 
 //CORS
 let corsOptions = {
-  origin: 'https://urielfuentes98.github.io/pomo-tracker-frontend',
-}
+  origin: "https://urielfuentes98.github.io/pomo-tracker-frontend",
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+};
 
 // set up the Express App server
 const app = express();
