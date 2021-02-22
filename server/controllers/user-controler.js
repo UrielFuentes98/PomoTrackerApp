@@ -68,7 +68,7 @@ router.delete("/logout", async (req, res) => {
       await User.logout(auth_token);
 
       console.log("DELETE: /logout. Session finished.");
-      res.clearCookie("auth_token");
+      res.clearCookie("auth_token", { sameSite: "none", secure: true });
       return res.status(200).send("Session finished.");
     } catch (err) {
       console.error("Error. DELETE: /logout.", err.message);
