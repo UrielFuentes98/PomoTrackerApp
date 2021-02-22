@@ -12,6 +12,7 @@ const userController = require("./controllers/user-controler");
 let corsOptions = {
   origin: "https://urielfuentes98.github.io",
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  credentials: true
 };
 
 // set up the Express App server
