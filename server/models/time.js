@@ -1,10 +1,6 @@
 const { Model, Op } = require("sequelize");
 let dayjs = require("dayjs");
 
-const dateFromNow = (daysFromNow = 0, interval = "day") => {
-  return dayjs().subtract(daysFromNow, interval).format("YYYY-MM-DD");
-};
-
 module.exports = (sequelize, DataTypes) => {
   class Time extends Model {
     /**
@@ -36,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     const result = await Time.findOne({
       where: {
         UserId: user.id,
-        date: dateFromNow(),
+        date: dayjs().format("YYYY-MM-DD"),
       },
     });
     if (result) {
@@ -55,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       const newReg = await Time.create({
         time_sec: parseInt(time),
         pomodoros: numPomodoro,
-        date: dateFromNow(),
+        date: dayjs().format("YYYY-MM-DD"),
         UserId: user.id,
       });
       if (!newReg) {
@@ -82,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     const today = await Time.findOne({
       where: {
         UserId: user.id,
-        date: dateFromNow(),
+        date: dayjs().format("YYYY-MM-DD"),
       },
     });
 
@@ -90,12 +86,17 @@ module.exports = (sequelize, DataTypes) => {
       Stats.secToday = today.time_sec;
       Stats.pomoToday = today.pomodoros;
     }
-
+    
     //Find stats for last week
     const weekData = await Time.findAll({
       where: {
         UserId: user.id,
-        date: { [Op.between]: [dateFromNow(1, "week"), dateFromNow()] },
+        date: {
+          [Op.between]: [
+            dayjs().day(1).format("YYYY-MM-DD"),
+            dayjs().format("YYYY-MM-DD"),
+          ],
+        },
       },
     });
 
@@ -109,7 +110,12 @@ module.exports = (sequelize, DataTypes) => {
     const monthData = await Time.findAll({
       where: {
         UserId: user.id,
-        date: { [Op.between]: [dateFromNow(1, "month"), dateFromNow()] },
+        date: {
+          [Op.between]: [
+            dayjs().date(1).format("YYYY-MM-DD"),
+            dayjs().format("YYYY-MM-DD"),
+          ],
+        },
       },
     });
 
