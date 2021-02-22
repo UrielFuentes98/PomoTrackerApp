@@ -41,16 +41,13 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const userObject = await User.authenticate(user_id, password);
-    const userData = {
-      username: userObject.user.username,
-      msg: "User logged in",
-    };
+    const tokenObject = await User.authenticate(user_id, password);
+    
     console.log("POST: /login. User logged in.");
-    return res.cookie("auth_token", userObject.authToken.token).json(userData);
+    return res.cookie("auth_token", tokenObject.token).send("User logged in");
   } catch (err) {
     console.error("Error. POST: /login.", err.message);
-    return res.status(400).json({ msg: err.message });
+    return res.status(400).send(err.message);
   }
 });
 
