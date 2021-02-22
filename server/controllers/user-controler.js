@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
     // send back the new user and auth token to the client
     return res
       .status(200)
-      .cookie("auth_token", tokenObj.token, {sameSite: false})
+      .cookie("auth_token", tokenObj.token, {sameSite: 'none'})
       .send("User registered.");
   } catch (error) {
     const errors = error.errors.map((err) => err.message);
@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
     const tokenObject = await User.authenticate(user_id, password);
     
     console.log("POST: /login. User logged in.");
-    return res.cookie("auth_token", tokenObject.token, {sameSite: false}).send("User logged in");
+    return res.cookie("auth_token", tokenObject.token, {sameSite: 'none'}).send("User logged in");
   } catch (err) {
     console.error("Error. POST: /login.", err.message);
     return res.status(400).send(err.message);
