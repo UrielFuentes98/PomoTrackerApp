@@ -10,7 +10,7 @@ const userController = require("./controllers/user-controler");
 
 //CORS
 let corsOptions = {
-  origin: "https://urielfuentes98.github.io/pomo-tracker-frontend",
+  origin: "https://urielfuentes98.github.io",
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
 };
 
