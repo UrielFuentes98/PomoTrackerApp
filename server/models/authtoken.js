@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "AuthToken",
-      timestamps: false,
+      updatedAt: false,
     }
   );
 
