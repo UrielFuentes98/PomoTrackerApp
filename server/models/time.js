@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     const result = await Time.findOne({
       where: {
         UserId: user.id,
-        date: dayjs().add(1, 'day').format("YYYY-MM-DD"),
+        date: dayjs().format("YYYY-MM-DD"),
       },
     });
     if (result) {
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       const newReg = await Time.create({
         time_sec: parseInt(time),
         pomodoros: numPomodoro,
-        date: dayjs().add(1, 'day').format("YYYY-MM-DD"),
+        date: dayjs().format("YYYY-MM-DD"),
         UserId: user.id,
       });
       if (!newReg) {
