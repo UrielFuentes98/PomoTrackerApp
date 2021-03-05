@@ -1,6 +1,12 @@
 const { Model, Op } = require("sequelize");
 let dayjs = require("dayjs");
 
+const dateFormat = "YYYY-MM-DD";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+var isoWeek = require('dayjs/plugin/isoWeek')
+dayjs.extend(isoWeek)
+
 module.exports = (sequelize, DataTypes) => {
   class Time extends Model {
     /**
@@ -25,14 +31,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Time.updateRecord = async function (user, time, pomodoro) {
+  Time.updateRecord = async function (user, time, pomodoro, userDate=dayjs().format(dateFormat)) {
     const numPomodoro = pomodoro == "true" ? 1 : 0;
 
     //Check if today record already exists for user
     const result = await Time.findOne({
       where: {
         UserId: user.id,
-        date: dayjs().format("YYYY-MM-DD"),
+        date: userDate,
       },
     });
     if (result) {
@@ -51,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       const newReg = await Time.create({
         time_sec: parseInt(time),
         pomodoros: numPomodoro,
-        date: dayjs().format("YYYY-MM-DD"),
+        date: userDate,
         UserId: user.id,
       });
       if (!newReg) {
@@ -62,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  Time.getStats = async function (user) {
+  Time.getStats = async function (user, userDate=dayjs().format(dateFormat)) {
     //Object to store main stats to return
     let Stats = {
       username: user.username,
@@ -78,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
     const today = await Time.findOne({
       where: {
         UserId: user.id,
-        date: dayjs().format("YYYY-MM-DD"),
+        date: userDate,
       },
     });
 
@@ -86,15 +92,16 @@ module.exports = (sequelize, DataTypes) => {
       Stats.secToday = today.time_sec;
       Stats.pomoToday = today.pomodoros;
     }
-    
+    console.log("Week, ", dayjs(userDate, dateFormat).isoWeekday(1).format(dateFormat))
+
     //Find stats for last week
     const weekData = await Time.findAll({
       where: {
         UserId: user.id,
         date: {
           [Op.between]: [
-            dayjs().day(1).format("YYYY-MM-DD"),
-            dayjs().format("YYYY-MM-DD"),
+            dayjs(userDate, dateFormat).isoWeekday(1).format(dateFormat),
+            userDate,
           ],
         },
       },
@@ -106,14 +113,15 @@ module.exports = (sequelize, DataTypes) => {
       Stats.pomoWeek += weekData[i].pomodoros;
     }
 
+    console.log("Month, ", dayjs(userDate, dateFormat).date(1).format(dateFormat))
     //Find stats for last month
     const monthData = await Time.findAll({
       where: {
         UserId: user.id,
         date: {
           [Op.between]: [
-            dayjs().date(1).format("YYYY-MM-DD"),
-            dayjs().format("YYYY-MM-DD"),
+            dayjs(userDate, dateFormat).date(1).format(dateFormat),
+            userDate,
           ],
         },
       },

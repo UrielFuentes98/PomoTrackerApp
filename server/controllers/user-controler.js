@@ -6,6 +6,11 @@ const saltRounds = 10;
 
 const { User, Time } = require("../models");
 
+const cookiesSettings =
+  process.env.NODE_ENV === "production"
+    ? { sameSite: "none", secure: true }
+    : {};
+
 /* Register Route
 ========================================================= */
 router.post("/register", async (req, res) => {
@@ -22,7 +27,7 @@ router.post("/register", async (req, res) => {
     // send back the new user and auth token to the client
     return res
       .status(200)
-      .cookie("auth_token", tokenObj.token, { sameSite: "none", secure: true })
+      .cookie("auth_token", tokenObj.token, cookiesSettings)
       .send("User registered.");
   } catch (error) {
     const errors = error.errors.map((err) => err.message);
@@ -45,10 +50,7 @@ router.post("/login", async (req, res) => {
 
     console.log("POST: /login. User logged in.");
     return res
-      .cookie("auth_token", tokenObject.token, {
-        sameSite: "none",
-        secure: true,
-      })
+      .cookie("auth_token", tokenObject.token, cookiesSettings)
       .send("User logged in");
   } catch (err) {
     console.error("Error. POST: /login.", err.message);
@@ -68,7 +70,7 @@ router.delete("/logout", async (req, res) => {
       await User.logout(auth_token);
 
       console.log("DELETE: /logout. Session finished.");
-      res.clearCookie("auth_token", { sameSite: "none", secure: true });
+      res.clearCookie("auth_token", cookiesSettings);
       return res.status(200).send("Session finished.");
     } catch (err) {
       console.error("Error. DELETE: /logout.", err.message);
@@ -84,9 +86,9 @@ router.delete("/logout", async (req, res) => {
 /* Post data route
 ========================================================= */
 router.post("/sendRecord", async (req, res) => {
-  const { time, pomodoro } = req.body;
+  const { time, pomodoro, date } = req.body;
   const { user } = req;
-  Time.updateRecord(user, time, pomodoro)
+  Time.updateRecord(user, time, pomodoro, date)
     .then((result) => {
       console.log("POST: /sendRecord. OK 200");
       res.status(200).send(result);
@@ -99,7 +101,7 @@ router.post("/sendRecord", async (req, res) => {
 
 router.get("/main-stats", async (req, res) => {
   try {
-    let stats = await Time.getStats(req.user);
+    let stats = await Time.getStats(req.user, req.query.date);
     console.log("GET: /main-stats. OK 200");
     res.status(200).json(stats);
   } catch (error) {
@@ -109,9 +111,9 @@ router.get("/main-stats", async (req, res) => {
   }
 });
 
-router.get('/checkCookie', (req, res) => {
+router.get("/checkCookie", (req, res) => {
   return res.send("Cookie set");
-})
+});
 
 // export the router so we can pass the routes to our server
 module.exports = router;
