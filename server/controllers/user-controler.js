@@ -87,6 +87,12 @@ router.delete("/logout", async (req, res) => {
 ========================================================= */
 router.post("/sendRecord", async (req, res) => {
   const { time, pomodoro, date } = req.body;
+  
+  const regex = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
+  if (regex.test(date) === false) {
+    return res.status(400).send("Date format error.");
+  }
+
   const { user } = req;
   Time.updateRecord(user, time, pomodoro, date)
     .then((result) => {
@@ -101,6 +107,11 @@ router.post("/sendRecord", async (req, res) => {
 
 router.get("/main-stats", async (req, res) => {
   try {
+    const regex = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
+    if (regex.test(req.query.date) === false) {
+      return res.status(400).send("Date format error.");
+    }
+
     let stats = await Time.getStats(req.user, req.query.date);
     console.log("GET: /main-stats. OK 200");
     res.status(200).json(stats);

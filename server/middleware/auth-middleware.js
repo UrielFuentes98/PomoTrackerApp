@@ -2,7 +2,7 @@ const { User, AuthToken } = require("../models");
 
 module.exports = async function (req, res, next) {
   //Check for paths that shouldn´t have requests with session tokens.
-  if (req.path != "/register" && req.path != "/login") {
+  if (req.path !== "/register" && req.path !== "/login") {
     //Check for session token in header
     if (req.cookies.auth_token) {
       const userData = await AuthToken.findOne({

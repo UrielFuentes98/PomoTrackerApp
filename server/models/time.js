@@ -92,7 +92,6 @@ module.exports = (sequelize, DataTypes) => {
       Stats.secToday = today.time_sec;
       Stats.pomoToday = today.pomodoros;
     }
-    console.log("Week, ", dayjs(userDate, dateFormat).isoWeekday(1).format(dateFormat))
 
     //Find stats for last week
     const weekData = await Time.findAll({
@@ -113,7 +112,6 @@ module.exports = (sequelize, DataTypes) => {
       Stats.pomoWeek += weekData[i].pomodoros;
     }
 
-    console.log("Month, ", dayjs(userDate, dateFormat).date(1).format(dateFormat))
     //Find stats for last month
     const monthData = await Time.findAll({
       where: {
