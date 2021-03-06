@@ -46,6 +46,7 @@ router.post("/login", async (req, res) => {
   }
 
   try {
+    //Validate credentials and generate session token.
     const tokenObject = await User.authenticate(user_id, password);
 
     console.log("POST: /login. User logged in.");
@@ -64,7 +65,6 @@ router.delete("/logout", async (req, res) => {
   //Getting authToken and user data
   const { auth_token } = req.cookies;
 
-  //Check if we have user and session token
   if (auth_token) {
     try {
       await User.logout(auth_token);
@@ -83,11 +83,12 @@ router.delete("/logout", async (req, res) => {
   return res.status(400).send("No session token provided.");
 });
 
-/* Post data route
+/* Post record route
 ========================================================= */
 router.post("/sendRecord", async (req, res) => {
   const { time, pomodoro, date } = req.body;
-  
+
+  //Validate date received.
   const regex = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
   if (regex.test(date) === false) {
     return res.status(400).send("Date format error.");
@@ -105,8 +106,12 @@ router.post("/sendRecord", async (req, res) => {
     });
 });
 
+/* Get time records route
+========================================================= */
+
 router.get("/main-stats", async (req, res) => {
   try {
+    //Validate date received.
     const regex = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
     if (regex.test(req.query.date) === false) {
       return res.status(400).send("Date format error.");
@@ -122,9 +127,11 @@ router.get("/main-stats", async (req, res) => {
   }
 });
 
+/* Check cookie session route.
+========================================================= */
+
 router.get("/checkCookie", (req, res) => {
   return res.send("Cookie set");
 });
 
-// export the router so we can pass the routes to our server
 module.exports = router;

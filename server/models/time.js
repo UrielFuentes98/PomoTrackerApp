@@ -4,16 +4,11 @@ let dayjs = require("dayjs");
 const dateFormat = "YYYY-MM-DD";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
-var isoWeek = require('dayjs/plugin/isoWeek')
-dayjs.extend(isoWeek)
+var isoWeek = require("dayjs/plugin/isoWeek");
+dayjs.extend(isoWeek);
 
 module.exports = (sequelize, DataTypes) => {
   class Time extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate({ User }) {
       Time.belongsTo(User);
     }
@@ -31,7 +26,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Time.updateRecord = async function (user, time, pomodoro, userDate=dayjs().format(dateFormat)) {
+  Time.updateRecord = async function (
+    user,
+    time,
+    pomodoro,
+    userDate = dayjs().format(dateFormat)
+  ) {
     const numPomodoro = pomodoro == "true" ? 1 : 0;
 
     //Check if today record already exists for user
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  Time.getStats = async function (user, userDate=dayjs().format(dateFormat)) {
+  Time.getStats = async function (user, userDate = dayjs().format(dateFormat)) {
     //Object to store main stats to return
     let Stats = {
       username: user.username,
