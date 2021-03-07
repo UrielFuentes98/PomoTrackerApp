@@ -3,7 +3,6 @@ const express = require("express");
 var cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-// Requiring our models for syncing db
 const db = require("./models/index");
 const customAuthMiddleware = require("./middleware/auth-middleware");
 const userController = require("./controllers/user-controler");
@@ -31,7 +30,7 @@ app.use((err, req, res, next) => {
   res.send(err.message);
 });
 
-// sync our sequelize models and then start server
+// sync sequelize models and then start server
 db.sequelize.sync({ force: false }).then(() => {
   //Start server after db connection.
   app.listen(PORT, () => {
